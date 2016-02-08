@@ -3,9 +3,10 @@
   Geographical Information System interface with Envire and vice versa
   </description>
   <author>Envire Team/ric-team8@dfki.de</author>
-  <license></license>
-  <url>http://</url>
-  <logo>http://</logo>
+  <maintainer>Javier Hidalgo Carrio/javier.hidalgo_carrio@dfki.de</maintainer>
+  <license>BSD</license>
+  <url>http://rock-robotics.org/</url>
+
   <depend package="base/cmake" />
   <!--
    To add any dependencies use the depend tag
@@ -16,5 +17,5 @@
   -->
   <depend package="envire/envire_core" />
   <depend package="slam/envire_maps" />
-  <depend package="cgal" />
+  <rosdep package="gdal" />
 </package>
