@@ -15,7 +15,9 @@
   <depend package="dummy-dependency-n-1" />
   <depend package="dummy-dependency-n" />
   -->
+  <depend package="base/types" />
   <depend package="envire/envire_core" />
   <depend package="slam/envire_maps" />
+  <depend package="gui/vizkit3d" optional="1"/>
   <rosdep package="gdal" />
 </package>
