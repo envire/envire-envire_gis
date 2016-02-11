@@ -6,6 +6,7 @@ RasterMap::RasterMap()
 {
 
     GDALAllRegister();
+    this->dataset = NULL;
 }
 
 RasterMap::~RasterMap() {this->close();}
@@ -18,6 +19,10 @@ void RasterMap::welcome()
 
 void RasterMap::open(std::string const& path)
 {
+    if (this->dataset != NULL)
+    {
+        GDALClose(this->dataset);
+    }
     this->dataset = (GDALDataset *) GDALOpen(path.c_str(), GA_ReadOnly );
 
     if( this->dataset == NULL )
@@ -45,13 +50,15 @@ void RasterMap::open(std::string const& path)
 void RasterMap::close()
 {
 
-    GDALClose(this->dataset);
+    if (this->dataset != NULL)
+    {
+        GDALClose(this->dataset);
+    }
     return;
 }
 
 
-template <typename T>
-typename envire::maps::GridMap<T>::Ptr RasterMap::toGridMap(const int band_number)
+void RasterMap::toGridMap(const int band_number)
 {
 
     /** Check the band number **/
@@ -72,23 +79,23 @@ typename envire::maps::GridMap<T>::Ptr RasterMap::toGridMap(const int band_numbe
     /** Check that the band type and the grid type are compatible **/
 
     /** Create and configure the map **/
-    envire::maps::Vector2ui cell_size(this->dataset->GetRasterXSize(), this->dataset->GetRasterYSize());
-    Eigen::Vector2d cell_resolution (this->adfGeoTransform[1], this->adfGeoTransform[5]);
-    typename envire::maps::GridMap<T>::Ptr map = envire::maps::GridMap<T>(cell_size, cell_resolution, 0.00);
+    envire::maps::Vector2ui cell_num(this->dataset->GetRasterXSize(), this->dataset->GetRasterYSize());
+    Eigen::Vector2d cell_resolution (this->adfGeoTransform[1], -this->adfGeoTransform[5]);
+    envire::maps::GridMap<double> map (cell_num, cell_resolution, 0.00);
+
+    std::cout<<"Map number of cell: "<<map.getNumCells().x()<<","<<map.getNumCells().y()<<"\n";
+    std::cout<<"Map resolution: "<<map.getResolution().x()<<","<<map.getResolution().y()<<"\n";
 
     /** Fetching the Grid Map **/
-    typename envire::maps::GridMap<T>::GridCell &data(map->getCells);
-    T* data_ptr = &data[0][0];
-    data.resize(boost::extents[cell_size[0]][cell_size[1]]);
-
-    std::cout<<"Size of data: "<<sizeof(data)<<"\n";
+    typename envire::maps::GridMap<double>::GridCell &data(map.getCells());
+    double* data_ptr = &data[0][0];
 
     /** Read the Raster Band **/
-    band->RasterIO(GF_Read, 0, 0,cell_size[0],cell_size[1],
-            data_ptr, cell_size[0], cell_size[1],
-            band_type, 0, sizeof(T) * cell_size[0] * cell_size[1]);
+    band->RasterIO(GF_Read, 0, 0,cell_num[0],cell_num[1],
+            data_ptr, cell_num[0], cell_num[1],
+            band_type, 0, 0);
 
-    return map;
+    return;
 }
 
 //bool RasterMap::checkBandType(const envire::maps::GridMap<T> const GDALRasterBand  *band)

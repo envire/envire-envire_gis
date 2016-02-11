@@ -51,8 +51,7 @@ namespace envire{ namespace gis
              * */
             void close();
 
-            template <typename T>
-            typename envire::maps::GridMap<T>::Ptr toGridMap(const int band_number);
+            void toGridMap(const int band_number);
 
             /**
              * Print a welcome to stdout
