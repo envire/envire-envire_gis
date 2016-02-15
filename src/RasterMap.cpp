@@ -81,19 +81,22 @@ void RasterMap::toGridMap(const int band_number)
     /** Create and configure the map **/
     envire::maps::Vector2ui cell_num(this->dataset->GetRasterXSize(), this->dataset->GetRasterYSize());
     Eigen::Vector2d cell_resolution (this->adfGeoTransform[1], -this->adfGeoTransform[5]);
-    envire::maps::GridMap<double> map (cell_num, cell_resolution, 0.00);
+    envire::maps::GridMap<float> map (cell_num, cell_resolution, 0.00);
 
     std::cout<<"Map number of cell: "<<map.getNumCells().x()<<","<<map.getNumCells().y()<<"\n";
     std::cout<<"Map resolution: "<<map.getResolution().x()<<","<<map.getResolution().y()<<"\n";
 
     /** Fetching the Grid Map **/
-    typename envire::maps::GridMap<double>::GridCell &data(map.getCells());
-    double* data_ptr = &data[0][0];
+    typename envire::maps::GridMap<float>::GridCell &data(map.getCells());
+    float* data_ptr = &data[0][0];
 
     /** Read the Raster Band **/
     band->RasterIO(GF_Read, 0, 0,cell_num[0],cell_num[1],
             data_ptr, cell_num[0], cell_num[1],
             band_type, 0, 0);
+
+    std::cout<<"GridMap Max: "<<map.getMax()<<"\n";
+    std::cout<<"GridMap Min: "<<map.getMin()<<"\n";
 
     return;
 }

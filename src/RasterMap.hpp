@@ -58,6 +58,9 @@ namespace envire{ namespace gis
              * \return nothing
              */
             void welcome();
+
+        private:
+
     };
 
 }} // end namespace envire::gis

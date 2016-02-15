@@ -14,8 +14,6 @@ BOOST_AUTO_TEST_CASE(test_read_raster)
         envire::maps::GridMap<double> grid_map;
 
         raster.toGridMap(1);
-
-        raster.close();
     }
     else
     {
