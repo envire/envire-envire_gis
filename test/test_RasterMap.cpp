@@ -11,9 +11,9 @@ BOOST_AUTO_TEST_CASE(test_read_raster)
     {
         raster.open(static_cast<std::string>(boost::unit_test::framework::master_test_suite().argv[1]));
 
-        envire::maps::GridMap<double> grid_map;
+        envire::maps::GridMap<float> grid_map;
 
-        raster.toGridMap(1);
+        raster.toGridMap(1, grid_map);
     }
     else
     {

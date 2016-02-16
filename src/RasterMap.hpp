@@ -51,7 +51,7 @@ namespace envire{ namespace gis
              * */
             void close();
 
-            void toGridMap(const int band_number);
+            void toGridMap(const int band_number, envire::maps::GridMap<float> &map);
 
             /**
              * Print a welcome to stdout
