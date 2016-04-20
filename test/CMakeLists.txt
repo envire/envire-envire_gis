@@ -1,5 +1,5 @@
 rock_testsuite(test_raster_map suite.cpp
-    test_RasterMap.cpp
+    test_Raster.cpp
     DEPS envire_gis)
 
 if( vizkit3d_FOUND )

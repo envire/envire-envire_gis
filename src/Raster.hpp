@@ -16,7 +16,7 @@
 namespace envire{ namespace gis
 
 {
-    class RasterMap
+    class Raster
     {
         public:
             GDALDataset  *dataset;
@@ -38,10 +38,10 @@ namespace envire{ namespace gis
         public:
 
             /** @brief default constructor */
-            RasterMap();
+            Raster();
 
             /** @brief default destructor */
-            ~RasterMap();
+            ~Raster();
 
             /**@brief open a raster
              * */

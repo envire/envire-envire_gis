@@ -1,11 +1,11 @@
 #include <boost/test/unit_test.hpp>
-#include <envire_gis/RasterMap.hpp>
+#include <envire_gis/Raster.hpp>
 
 using namespace envire::gis;
 
 BOOST_AUTO_TEST_CASE(test_read_raster)
 {
-    envire::gis::RasterMap raster;
+    envire::gis::Raster raster;
     raster.welcome();
     if (boost::unit_test::framework::master_test_suite().argc > 1.0)
     {
