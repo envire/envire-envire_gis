@@ -1,7 +1,7 @@
 #define BOOST_TEST_MODULE EnvireGisVizTest
 #include <boost/test/unit_test.hpp>
 
-#include <envire_gis/RasterMap.hpp>
+#include <envire_gis/Raster.hpp>
 
 #include <vizkit3d/Vizkit3DWidget.hpp>
 #include <vizkit3d/QtThreadedWidget.hpp>
@@ -11,7 +11,7 @@
 
 BOOST_AUTO_TEST_CASE(raster_to_elevation_viz)
 {
-    envire::gis::RasterMap raster;
+    envire::gis::Raster raster;
 
     if (boost::unit_test::framework::master_test_suite().argc > 1.0)
     {
@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE(raster_to_elevation_viz)
 
         /** Convert into an ElevationMap **/
         envire::maps::ElevationMap elev_map(grid_map.getNumCells(), grid_map.getResolution());
-        elev_map.localFrame().translation() << -0.5 * elev_map.getSize(), 0;
+        elev_map.getLocalFrame().translation() << -0.5 * elev_map.getSize(), 0;
 
         for (unsigned int x = 0; x < elev_map.getNumCells().x(); ++x)
         {
