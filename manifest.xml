@@ -17,7 +17,6 @@
   -->
   <depend package="base/types" />
   <depend package="envire/envire_core" />
-  <depend package="slam/envire_maps" />
-  <depend package="gui/vizkit3d" optional="1"/>
-  <rosdep package="gdal" />
+  <depend package="envire/gdal" />
+ <!--  <rosdep package="gdal" /> -->
 </package>

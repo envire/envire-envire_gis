@@ -1,6 +1,6 @@
 rock_library(envire_gis
-    SOURCES Raster.cpp
-    HEADERS Raster.hpp
+    SOURCES EnvireNetwork.cpp
+    HEADERS EnvireNetwork.hpp
     DEPS_CMAKE GDAL
-    DEPS_PKGCONFIG envire_core envire_maps)
+    DEPS_PKGCONFIG envire_core)
 
