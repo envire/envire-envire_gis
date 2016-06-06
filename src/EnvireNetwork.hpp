@@ -7,13 +7,11 @@
 #include <gdal/gnm.h>
 #include <gdal/gnm_priv.h>
 
-/** Std library **/
-#include <sstream>
-#include <iostream>
-#include <stdexcept>
-
 namespace envire{ namespace gis
 {
+    /** @brief Envire GNM Generic network of the envire graph
+     * GNMGenericNetwork inherit from GDALDataset **/
+
     class EnvireNetwork: public GNMGenericNetwork
     {
     public:
