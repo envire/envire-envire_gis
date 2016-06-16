@@ -7,9 +7,11 @@
 /** GDAL Core C++/Private declarations **/
 #include <gdal/gdal_priv.h>
 
+/** Eigen **/
+#include <base/Eigen.hpp>
+
 /** Std library **/
-#include <iostream>    //
-#include <map>    // std:map:map
+#include <iostream>    // std cout
 #include <typeinfo>    // for getting the plugin class name 
 
 namespace envire{ namespace gis
@@ -72,6 +74,11 @@ namespace envire{ namespace gis
          */
         virtual ~RasterPluginBand() {}
 
+        /** @brief Import
+         *
+         * import static cast helper function
+         *
+         */
         static RasterPluginBand<T> *Import(GDALRasterBand *raster_band)
         {
             /** Static cast the raster band to the RasterPluginBand **/
@@ -83,6 +90,15 @@ namespace envire{ namespace gis
             }
 
             return raster_plugin;
+        }
+
+        friend std::ostream& operator<<(std::ostream& out, const RasterPluginBand<T>& val)
+        {
+            out <<"RasterPLuginBand <"<< typeid( T ).name()
+                <<"> at band number "<< val.nBand<<" with size: "
+                <<val.nRasterXSize<<" x "<<val.nRasterYSize<<" "
+                <<"block Size "<<val.nBlockXSize<<" x "<<val.nBlockYSize;
+            return out;
         }
 
     protected:
@@ -137,7 +153,9 @@ namespace envire{ namespace gis
                 size = 8;
                 break;
               default:
-                throw std::runtime_error("GDAL type is not supported.");
+                std::stringstream strdefault;
+                strdefault <<"GDAL type"<< typeid(Type).name() <<" is not supported.";
+                throw std::runtime_error(strdefault.str());
             }
             std::stringstream strstr;
             strstr << "envire::gis::RasterPluginBand<T>: type missmatch: the array is of type "<< typeid(Type).name()
@@ -146,7 +164,7 @@ namespace envire{ namespace gis
             throw std::runtime_error(strstr.str());
         }
 
-    public:
+    protected:
 
         /* @param data data to convert
          */
@@ -154,7 +172,11 @@ namespace envire{ namespace gis
 
         /* @param data data to convert
          */
-        virtual void convertToEnvireType(T &data) = 0;
+        virtual void convertToEnvireType(T &data, const base::Vector2d &cell_resolution = base::Vector2d::Zero()) = 0;
+
+        /** GDALRasterBand left this method as pure virtual **/
+        virtual CPLErr IReadBlock( int, int, void * ) {};
+
     };
 }} // end namespace envire::gis
 
