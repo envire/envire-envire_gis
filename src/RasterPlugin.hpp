@@ -4,9 +4,7 @@
 #include <envire_gis/RasterPluginBand.hpp>
 
 /** Std library **/
-#include <iostream>    //
 #include <map>    // std:map:map
-#include <typeinfo>    // for getting the plugin class name 
 
 namespace envire{ namespace gis
 {
@@ -27,14 +25,20 @@ namespace envire{ namespace gis
 
     protected:
 
+        /** resolution of the raster **/
+        base::Vector2d resolution;
+
         /** Band number coincident with GDAL nBand but indexed by plugin type name **/
         BandNumber band_number;
 
     public:
         /** @brief Default Constructor
          */
-        RasterPlugin(RasterPluginBand<T> *parent = NULL): RasterPluginBand<T>(parent)
+        RasterPlugin(GDALRasterBand *parent = NULL, const base::Vector2d &resolution = base::Vector2d::Zero()): RasterPluginBand<T>(parent)
         {
+            /** resolution of the raster **/
+            this->resolution = resolution;
+
             /** Register the plugin type name and the band number **/
             this->band_number.insert(std::pair<std::string, int>(this->getName<T>(), this->nBand));
 
@@ -56,17 +60,23 @@ namespace envire{ namespace gis
         /**@brief is
          * return whether it is a Raster pl
          */
-        bool isRaster() { return true; }
+        bool isRaster() const { return true; }
 
         /** @brief getName
          *
          * @return the raster plugin name
          *
          */
-        template<typename Type>
+        template<typename Type = T>
         const std::string static getName()
         {
             return typeid(RasterPluginBand< Type >).name();
+        }
+
+        template<typename Type = T>
+        const int bandNumber() const
+        {
+            return this->band_number.find(this->getName<Type>())->second;
         }
 
         template<typename Type>
@@ -78,12 +88,12 @@ namespace envire{ namespace gis
             /** Retrieve the raster band **/
             BandType *band = dynamic_cast<BandType*>(this);
 
-            std::cout<<"[TO_GIS] Band name is: "<<band->getName()<<" with number "<<this->band_number[band->getName()]<<"\n";
+            std::cout<<"[TO_GIS] Band name is: "<<band->getName<Type>()<<" with number "<<this->band_number[band->getName<Type>()]<<"\n";
 
             if(band)
             {
                 /** Dedicated method to convert data to GIS GDAL**/
-                band->toRasterBand(data);
+                band->convertToRasterBand(data);
             }
             else
             {
@@ -96,14 +106,23 @@ namespace envire{ namespace gis
         template<typename Type>
         void fromGis(Type &data)
         {
-                        /** If raster band is not NULL **/
-                /** Get the raster band name **/
-                //std::cout<<"FROM_GIS: dynamic_cast worked, band name: "<<band->getName<Type>()<<"!!\n";
+            /** Shorter raster plugin band type name **/
+            typedef RasterPluginBand<Type> BandType;
 
-               // std::cout<<"[FROM_GIS] SUCCESS Band name is: "<<band->getName<Type>()<<" with number "<<this->band_number[band->getName<Type>()]<<"\n";
+            std::cout<<"[FROM_GIS]: Requested band_type: "<<this->getName<Type>()<<" \n";
 
+            /** Retrieve the raster band **/
+            BandType *band = dynamic_cast<BandType*>(this);
+
+            if (band)
+            {
                 /** Dedicated method to convert from GIS GDAL to data **/
-                //this->template convertToEnvireType<Type>(data);
+                band->convertToEnvireType(data, this->resolution);
+            }
+            else
+            {
+                throw std::runtime_error("[FROM_GIS] Wrong Raster Band type given to convert");
+            }
         }
 
     private:
@@ -136,6 +155,15 @@ namespace envire{ namespace gis
             return;
         }
     };
+
+    //Note how this is declared outside of the class body, so it is a free function instead of a memberfunction
+    template<class Type> inline std::ostream& operator<<(std::ostream& out, const RasterPlugin<Type>& val)
+    {
+        out << "RasterPlugin <"<<typeid(Type).name()<<"> maps to Band: "<<val.bandNumber() <<"\n";
+        out << static_cast< const RasterPluginBand< Type > &>(val);
+        return out;
+    }
+
 }} // end namespace envire::gis
 
 #endif // _RASTER_PLUGIN_HPP_
