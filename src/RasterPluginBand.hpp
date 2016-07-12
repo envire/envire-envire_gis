@@ -84,7 +84,7 @@ namespace envire{ namespace gis
             /** Static cast the raster band to the RasterPluginBand **/
             RasterPluginBand<T> * raster_plugin = static_cast<RasterPluginBand<T> *>(raster_band);
 
-            if (RasterPluginBand<T>::checkCellType<typename T::TemplateType::CellType>(raster_band))
+            if (RasterPluginBand<T>::checkCellType<typename T::CellType>(raster_band))
             {
                 std::cout<<"[IMPORT] GDALRasterBand with "<<raster_plugin->GetBand()<<" number of Raster Bands of type "<<raster_band->GetRasterDataType()<<"\n";
             }
@@ -175,7 +175,7 @@ namespace envire{ namespace gis
         virtual void convertToEnvireType(T &data, const base::Vector2d &cell_resolution = base::Vector2d::Zero()) = 0;
 
         /** GDALRasterBand left this method as pure virtual **/
-        virtual CPLErr IReadBlock( int, int, void * ) {};
+        virtual CPLErr IReadBlock( int, int, void * ) { return CE_Fatal;};
 
     };
 }} // end namespace envire::gis
