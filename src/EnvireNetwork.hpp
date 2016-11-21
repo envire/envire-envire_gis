@@ -5,7 +5,7 @@
 
 /** GDAL library **/
 #include <gdal/gnm.h>
-#include <gdal/gnm_priv.h>
+#include <gdal/gnm_api.h>
 
 namespace envire{ namespace gis
 {
