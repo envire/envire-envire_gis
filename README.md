@@ -4,9 +4,6 @@ GIS interface with Envire
 
 Geographical Information System interface with Envire and vice versa
 
-License
--------
-dummy-license
 
 Installation
 ------------
