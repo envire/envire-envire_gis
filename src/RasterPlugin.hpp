@@ -114,7 +114,7 @@ namespace envire{ namespace gis
             /** Retrieve the raster band **/
             BandType *band = dynamic_cast<BandType*>(this);
 
-            std::cout<<"[TO_GIS] Band name is: "<<band->getName<Type>()<<" with number "<<this->band_number[band->getName<Type>()]<<"\n";
+            //std::cout<<"[TO_GIS] Band name is: "<<band->getName<Type>()<<" with number "<<this->band_number[band->getName<Type>()]<<"\n";
 
             if(band)
             {
