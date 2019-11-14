@@ -12,4 +12,4 @@ rock_standard_layout()
 configure_file(cmake/enviregis-config.cmake.in enviregis-config.cmake @ONLY)
 install(FILES cmake/EnvireGIS.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/enviregis-config.cmake
-        DESTINATION share/rock/cmake)
+        DESTINATION share/enviregis/cmake)
